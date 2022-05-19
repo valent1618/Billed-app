@@ -56,10 +56,14 @@ live-server
 ```
 
 ### Account
-**Administrator**
+#### Administrator
+```
 user : admin@company.tld
 password : admin
+```
 
-**Employee**
+#### Employee
+```
 user : employee@company.tld
 password : employee
+```
