@@ -5,7 +5,7 @@
 Saas for HR. Ability to log in as an employee, or as an HR administrator.
 Employees can add expense reports and administrator can manage them.
 
-> This is the eighth project of the formation "Développeur d'application - JavaScript React" - OpenClassrooms
+> This is the ninth project of the formation "Développeur d'application - JavaScript React" - OpenClassrooms
 
 ## Architecture
 This project is connected to an API backend service who you must run locally.
