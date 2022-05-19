@@ -8,6 +8,7 @@ Employees can add expense reports and administrator can manage them.
 > This is the ninth project of the formation "Développeur d'application - JavaScript React" - OpenClassrooms
 
 ## Architecture
+
 This project is connected to an API backend service who you must run locally.
 
 API backend service : https://github.com/OpenClassrooms-Student-Center/Billed-app-FR-back
@@ -18,26 +19,32 @@ API backend service : https://github.com/OpenClassrooms-Student-Center/Billed-ap
 
 ### Installing
 
-*You can remove -g from command line to install dependencies locally and not globally*
+_You can remove -g from command line to install dependencies locally and not globally_
 
 #### Backend
+
 **Clone repo**
+
 ```
 git clone https://github.com/OpenClassrooms-Student-Center/Billed-app-FR-Back.git
 ```
 
 **And install dependencies**
+
 ```
 npm install
 ```
 
 #### Frontend
+
 **Clone repo**
+
 ```
 git clone https://github.com/valent1618/Billed-app
 ```
 
 **And install live-server**
+
 ```
 npm install -g live-server
 ```
@@ -45,6 +52,7 @@ npm install -g live-server
 ### Run
 
 #### Backend
+
 ```
 npm run:dev
 ```
@@ -53,18 +61,22 @@ npm run:dev
 The API is locally available on port 5678, go to http://localhost:5678
 
 #### Frontend
+
 ```
 live-server
 ```
 
 ### Account
+
 #### Administrator
+
 ```
 user : admin@company.tld
 password : admin
 ```
 
 #### Employee
+
 ```
 user : employee@company.tld
 password : employee
