@@ -57,7 +57,7 @@ live-server
 
 ### Account
 **Administrator**
-user : admin@company.tld 
+user : admin@company.tld
 password : admin
 
 **Employee**
