@@ -4,7 +4,6 @@
 
 import '@testing-library/jest-dom';
 
-import store from '../app/Store.js';
 import { fireEvent, screen, waitFor } from '@testing-library/dom';
 import BillsUI from '../views/BillsUI.js';
 import { bills } from '../fixtures/bills.js';
@@ -12,8 +11,6 @@ import { ROUTES_PATH } from '../constants/routes.js';
 import { localStorageMock } from '../__mocks__/localStorage.js';
 
 import router from '../app/Router.js';
-import Bills from '../containers/Bills.js';
-import { resolve } from 'path';
 
 describe('Given I am connected as an employee', () => {
   describe('When I am on Bills Page', () => {
@@ -34,7 +31,7 @@ describe('Given I am connected as an employee', () => {
     });
 
     afterEach(() => {
-      document.innerHTML = '';
+      document.body.removeChild(document.getElementById('root'));
     });
 
     test('Then bill icon in vertical layout should be highlighted', () => {
