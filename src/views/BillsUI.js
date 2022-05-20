@@ -21,14 +21,16 @@ const row = (bill) => {
 };
 
 const rows = (data) => {
-  const antiChrono = (a, b) => (a.date < b.date ? 1 : -1);
-  const dataSorted = [...data].sort(antiChrono);
+  if (data && data.length) {
+    const antiChrono = (a, b) => (a.date < b.date ? 1 : -1);
+    const dataSorted = [...data].sort(antiChrono);
 
-  dataSorted.forEach((data) => (data.date = formatDate(data.date)));
+    dataSorted.forEach((data) => (data.date = formatDate(data.date)));
 
-  return dataSorted && dataSorted.length
-    ? dataSorted.map((bill) => row(bill)).join('')
-    : '';
+    return dataSorted.map((bill) => row(bill)).join('');
+  } else {
+    return '';
+  }
 };
 
 export default ({ data: bills, error, loading }) => {
