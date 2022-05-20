@@ -3,13 +3,14 @@ import ErrorPage from './ErrorPage.js';
 import LoadingPage from './LoadingPage.js';
 
 import Actions from './Actions.js';
+import { formatDate } from '../app/format.js';
 
 const row = (bill) => {
   return `
     <tr>
       <td>${bill.type}</td>
       <td>${bill.name}</td>
-      <td>${bill.date}</td>
+      <td data-testid="bill-date">${bill.date}</td>
       <td>${bill.amount} €</td>
       <td>${bill.status}</td>
       <td>
@@ -21,8 +22,13 @@ const row = (bill) => {
 
 const rows = (data) => {
   const antiChrono = (a, b) => (a.date < b.date ? 1 : -1);
-  data = [...data].sort(antiChrono);
-  return data && data.length ? data.map((bill) => row(bill)).join('') : '';
+  const dataSorted = [...data].sort(antiChrono);
+
+  dataSorted.forEach((data) => (data.date = formatDate(data.date)));
+
+  return dataSorted && dataSorted.length
+    ? dataSorted.map((bill) => row(bill)).join('')
+    : '';
 };
 
 export default ({ data: bills, error, loading }) => {
