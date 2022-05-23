@@ -11,6 +11,7 @@ import { ROUTES_PATH } from '../constants/routes.js';
 import { localStorageMock } from '../__mocks__/localStorage.js';
 
 import router from '../app/Router.js';
+import { formatDate } from '../app/format.js';
 
 describe('Given I am connected as an employee', () => {
   describe('When I am on Bills Page', () => {
@@ -43,11 +44,17 @@ describe('Given I am connected as an employee', () => {
     });
 
     test('Then bills should be ordered from earliest to latest', () => {
+      // Copy bills for not modify the original array when formatDate is call
+      const billsCopyForDom = JSON.parse(JSON.stringify(bills));
+      const billsCopy = JSON.parse(JSON.stringify(bills));
+
       const root = document.getElementById('root');
-      root.innerHTML = BillsUI({ data: bills });
+      root.innerHTML = BillsUI({ data: billsCopyForDom });
 
       const antiChrono = (a, b) => (a.date < b.date ? 1 : -1);
-      const billsSorted = [...bills].sort(antiChrono);
+      const billsSorted = [...billsCopy].sort(antiChrono);
+
+      billsSorted.forEach((bill) => (bill.date = formatDate(bill.date)));
 
       const datesDOM = screen.getAllByTestId('bill-date');
 
