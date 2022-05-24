@@ -23,13 +23,18 @@ export default class NewBill {
 
     const correctExtension = ['jpg', 'jpeg', 'png'];
 
-    const fileName = e.target.files[0].name;
-    const extension = e.target.files[0].type.split('/')[1];
+    const file = e.target;
+    const fileName = file.files[0]?.name;
+    const extension = file.files[0]?.type.split('/')[1]
+      ? file.files[0].type.split('/')[1]
+      : file.files[0].type;
 
     if (!correctExtension.includes(extension)) {
-      e.target.setCustomValidity('Use only jpg, jpeg or png');
+      file.setCustomValidity('Use only jpg, jpeg or png');
+      file.setAttribute('valid', 'false');
     } else {
-      e.target.setCustomValidity('');
+      file.setCustomValidity('');
+      file.setAttribute('valid', 'true');
       this.fileName = fileName;
     }
   };
@@ -82,8 +87,6 @@ export default class NewBill {
         this.onNavigate(ROUTES_PATH['Bills']);
       })
       .catch((error) => console.error(error));
-
-    // const email = JSON.parse(localStorage.getItem('user')).email;
   };
 
   // not need to cover this function by tests
