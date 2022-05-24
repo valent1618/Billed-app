@@ -45,11 +45,10 @@ describe('Given I am connected as an employee', () => {
 
     test('Then bills should be ordered from earliest to latest', () => {
       // Copy bills for not modify the original array when formatDate is call
-      const billsCopyForDom = JSON.parse(JSON.stringify(bills));
       const billsCopy = JSON.parse(JSON.stringify(bills));
 
       const root = document.getElementById('root');
-      root.innerHTML = BillsUI({ data: billsCopyForDom });
+      root.innerHTML = BillsUI({ data: bills });
 
       const antiChrono = (a, b) => (a.date < b.date ? 1 : -1);
       const billsSorted = [...billsCopy].sort(antiChrono);

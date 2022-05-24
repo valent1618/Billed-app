@@ -25,9 +25,11 @@ const rows = (data) => {
     const antiChrono = (a, b) => (a.date < b.date ? 1 : -1);
     const dataSorted = [...data].sort(antiChrono);
 
-    dataSorted.forEach((data) => (data.date = formatDate(data.date)));
+    const copyData = JSON.parse(JSON.stringify(dataSorted));
 
-    return dataSorted.map((bill) => row(bill)).join('');
+    copyData.forEach((data) => (data.date = formatDate(data.date)));
+
+    return copyData.map((bill) => row(bill)).join('');
   } else {
     return '';
   }
