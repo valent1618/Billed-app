@@ -34,13 +34,15 @@ describe('Given I am connected as an employee', () => {
       document.body.innerHTML = '';
     });
 
-    test('Then I add new proof bill with incorrect format, the file should not be valid', () => {
+    test('Then I add new proof bill with incorrect format, the file input should not be valid', () => {
       const fakeFile = new File(['facture'], 'facture.ico', {
         type: 'image/ico',
       });
       const file = screen.getByTestId('file');
       userEvent.upload(file, fakeFile);
 
+      // checkValidity() is always false when adding files manualy
+      // check with attribute
       expect(file.getAttribute('data-valid')).toBe('false');
     });
 
@@ -51,12 +53,11 @@ describe('Given I am connected as an employee', () => {
       const file = screen.getByTestId('file');
       userEvent.upload(file, fakeFile);
 
-      // checkValidity() is always false with a manual adding files
       expect(file.getAttribute('data-valid')).toBe('true');
     });
 
     test('Then I click to the submit button with invalid input, the form is not valid and I should not be redirected to the Bills page', async () => {
-      // Submit the form
+      // Submit the form without fill required input
       const form = screen.getByTestId('form-new-bill');
       fireEvent.submit(form);
 
