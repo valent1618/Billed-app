@@ -37,9 +37,9 @@ export const card = (bill) => {
     : firstAndLastNames;
 
   return `
-    <div class='bill-card' id='open-bill${bill.id}' data-testid='open-bill${
-    bill.id
-  }'>
+    <div class='bill-card' id='open-bill${
+      bill.id
+    }' data-edit='false' data-testid='open-bill${bill.id}'>
       <div class='bill-card-name-container'>
         <div class='bill-card-name'> ${firstName} ${lastName} </div>
         <span class='bill-card-grey'> ... </span>
@@ -76,10 +76,79 @@ export default class {
     this.document = document;
     this.onNavigate = onNavigate;
     this.store = store;
-    $('#arrow-icon1').click((e) => this.handleShowTickets(e, bills, 1));
-    $('#arrow-icon2').click((e) => this.handleShowTickets(e, bills, 2));
-    $('#arrow-icon3').click((e) => this.handleShowTickets(e, bills, 3));
+
+    // Add evnt on arrows
+    const arrows = document.querySelectorAll('.arrow-icon');
+    arrows.forEach((arrow, i) => {
+      arrow.addEventListener('click', () =>
+        this.handleShowTickets(bills, i + 1)
+      );
+    });
+
     new Logout({ localStorage, onNavigate });
+  }
+
+  handleShowTickets(bills, index) {
+    const billsContainer = document.getElementById(
+      `status-bills-container${index}`
+    );
+    const arrow = document.getElementById(`arrow-icon${index}`);
+
+    if (billsContainer.getAttribute('data-visible') === 'false') {
+      billsContainer.setAttribute('data-visible', 'true');
+      arrow.style.transform = 'rotate(0deg)';
+      billsContainer.innerHTML = cards(filteredBills(bills, getStatus(index)));
+
+      // Add event on the bill just display
+      filteredBills(bills, getStatus(index)).forEach((bill) => {
+        const openBill = document.getElementById(`open-bill${bill.id}`);
+        openBill.addEventListener('click', () => {
+          this.handleEditTicket(bill, bills);
+        });
+      });
+    } else {
+      billsContainer.setAttribute('data-visible', 'false');
+      arrow.style.transform = 'rotate(90deg)';
+      billsContainer.innerHTML = '';
+    }
+  }
+
+  handleEditTicket(bill, bills) {
+    const openBill = document.getElementById(`open-bill${bill.id}`);
+    const rightContainer = document
+      .querySelector('.dashboard-right-container')
+      .querySelector('div');
+    const verticalNavBar = document.querySelector('.vertical-navbar');
+
+    if (openBill.getAttribute('data-edit') === 'false') {
+      bills.forEach((b) => {
+        const openB = document.getElementById(`open-bill${b.id}`);
+        if (openB) {
+          openB.setAttribute('data-edit', 'false');
+          openB.style.background = '#0D5AE5';
+        }
+      });
+      openBill.setAttribute('data-edit', 'true');
+      openBill.style.background = '#2A2B35';
+      rightContainer.innerHTML = DashboardFormUI(bill);
+      verticalNavBar.style.height = '150vh';
+
+      // Add event for the icon eye, accept and refuse button in the rightContainer just fill
+      document
+        .getElementById('icon-eye-d')
+        .addEventListener('click', () => this.handleClickIconEye());
+      document
+        .getElementById('btn-accept-bill')
+        .addEventListener('click', () => this.handleAcceptSubmit(bill));
+      document
+        .getElementById('btn-refuse-bill')
+        .addEventListener('click', () => this.handleAcceptSubmit(bill));
+    } else {
+      openBill.setAttribute('data-edit', 'false');
+      openBill.style.background = '#0D5AE5';
+      rightContainer.innerHTML = `<div id="big-billed-icon" data-testid="big-billed-icon"> ${BigBilledIcon} </div>`;
+      verticalNavBar.style.height = '150vh';
+    }
   }
 
   handleClickIconEye = () => {
@@ -94,32 +163,7 @@ export default class {
       $('#modaleFileAdmin1').modal('show');
   };
 
-  handleEditTicket(e, bill, bills) {
-    if (this.counter === undefined || this.id !== bill.id) this.counter = 0;
-    if (this.id === undefined || this.id !== bill.id) this.id = bill.id;
-    if (this.counter === 0) {
-      bills.forEach((b) => {
-        $(`#open-bill${b.id}`).css({ background: '#0D5AE5' });
-      });
-      $(`#open-bill${bill.id}`).css({ background: '#2A2B35' });
-      $('.dashboard-right-container div').html(DashboardFormUI(bill));
-      $('.vertical-navbar').css({ height: '150vh' });
-      this.counter = 1;
-    } else {
-      $(`#open-bill${bill.id}`).css({ background: '#0D5AE5' });
-
-      $('.dashboard-right-container div').html(`
-        <div id="big-billed-icon" data-testid="big-billed-icon"> ${BigBilledIcon} </div>
-      `);
-      $('.vertical-navbar').css({ height: '120vh' });
-      this.counter = 0;
-    }
-    $('#icon-eye-d').click(this.handleClickIconEye);
-    $('#btn-accept-bill').click((e) => this.handleAcceptSubmit(e, bill));
-    $('#btn-refuse-bill').click((e) => this.handleRefuseSubmit(e, bill));
-  }
-
-  handleAcceptSubmit = (e, bill) => {
+  handleAcceptSubmit = (bill) => {
     const newBill = {
       ...bill,
       status: 'accepted',
@@ -138,30 +182,6 @@ export default class {
     this.updateBill(newBill);
     this.onNavigate(ROUTES_PATH['Dashboard']);
   };
-
-  handleShowTickets(e, bills, index) {
-    if (this.counter === undefined || this.index !== index) this.counter = 0;
-    if (this.index === undefined || this.index !== index) this.index = index;
-    if (this.counter === 0) {
-      $(`#arrow-icon${this.index}`).css({ transform: 'rotate(0deg)' });
-      $(`#status-bills-container${this.index}`).html(
-        cards(filteredBills(bills, getStatus(this.index)))
-      );
-      this.counter = 1;
-    } else {
-      $(`#arrow-icon${this.index}`).css({ transform: 'rotate(90deg)' });
-      $(`#status-bills-container${this.index}`).html('');
-      this.counter = 0;
-    }
-
-    filteredBills(bills, getStatus(this.index)).forEach((bill) => {
-      $(`#open-bill${bill.id}`).click((e) =>
-        this.handleEditTicket(e, bill, bills)
-      );
-    });
-
-    return bills;
-  }
 
   getBillsAllUsers = () => {
     if (this.store) {
