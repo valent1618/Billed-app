@@ -5,15 +5,11 @@
 import '@testing-library/jest-dom';
 
 import { fireEvent, screen, waitFor } from '@testing-library/dom';
-
 import { ROUTES, ROUTES_PATH } from '../constants/routes.js';
 import { localStorageMock } from '../__mocks__/localStorage.js';
-
 import BillsUI from '../views/BillsUI.js';
 import { bills } from '../fixtures/bills.js';
-
 import Bills from '../containers/Bills.js';
-
 import { formatDate } from '../app/format.js';
 import mockStore from '../__mocks__/store';
 import router from '../app/Router.js';
