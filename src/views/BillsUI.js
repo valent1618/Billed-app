@@ -22,12 +22,20 @@ const row = (bill) => {
 
 const rows = (data) => {
   if (data && data.length) {
+    // Sort the data in chronological order
     const antiChrono = (a, b) => (a.date < b.date ? 1 : -1);
     const dataSorted = [...data].sort(antiChrono);
 
+    // Create a copy to not format the original data
     const copyData = JSON.parse(JSON.stringify(dataSorted));
 
-    copyData.forEach((data) => (data.date = formatDate(data.date)));
+    copyData.forEach((data) => {
+      // If the format of the date is something like ('2022-02-12')
+      if (/\d{4}-\d{2}-\d{2}/gm.test(data.date)) {
+        // Format the data
+        data.date = formatDate(data.date);
+      }
+    });
 
     return copyData.map((bill) => row(bill)).join('');
   } else {
