@@ -124,7 +124,7 @@ describe('Given I am connected as an employee', () => {
         root.innerHTML = ROUTES({ pathname });
       };
 
-      const billsContainer = new Bills({
+      new Bills({
         document,
         onNavigate,
         store: null,
